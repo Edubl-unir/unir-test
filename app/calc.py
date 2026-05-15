@@ -1,4 +1,5 @@
 import app
+import math
 
 
 class InvalidPermissions(Exception):
@@ -30,11 +31,24 @@ class Calculator:
 
     def power(self, x, y):
         self.check_types(x, y)
-        return x ** y
+        return math.pow(x, y)
 
-    def check_types(self, x, y):
-        if not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
-            raise TypeError("Parameters must be numbers")
+    def square_root(self, x):
+        self.check_types(x)
+        if x < 0:
+            raise TypeError("Square root of negative number is not possible")
+        return math.sqrt(x)
+
+    def log10(self, x):
+        self.check_types(x)
+        if x <= 0:
+            raise TypeError("Logarithm of zero or negative number is not possible")
+        return math.log10(x)
+
+    def check_types(self, *args):
+        for arg in args:
+            if not isinstance(arg, (int, float)):
+                raise TypeError("Parameters must be numbers")
 
 
 if __name__ == "__main__":  # pragma: no cover
