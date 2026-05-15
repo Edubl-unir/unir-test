@@ -59,7 +59,7 @@ def power(op_1, op_2):
     try:
         num_1, num_2 = util.convert_to_number(op_1), util.convert_to_number(op_2)
         return ("{}".format(CALCULATOR.power(num_1, num_2)), http.client.OK, HEADERS)
-    except TypeError as e:
+    except (TypeError, ValueError, OverflowError) as e:
         return (str(e), http.client.BAD_REQUEST, HEADERS)
 
 
