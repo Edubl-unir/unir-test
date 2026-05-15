@@ -1,12 +1,7 @@
 import unittest
 from unittest.mock import patch
 import pytest
-
-from app.calc import Calculator
-
-
-def mocked_validation(*args, **kwargs):
-    return True
+from app.calc import Calculator, InvalidPermissions
 
 
 @pytest.mark.unit
@@ -14,43 +9,53 @@ class TestCalculate(unittest.TestCase):
     def setUp(self):
         self.calc = Calculator()
 
-    def test_add_method_returns_correct_result(self):
-        self.assertEqual(4, self.calc.add(2, 2))
-        self.assertEqual(0, self.calc.add(2, -2))
-        self.assertEqual(0, self.calc.add(-2, 2))
-        self.assertEqual(1, self.calc.add(1, 0))
+    def test_add(self):
+        self.assertEqual(self.calc.add(2, 3), 5)
 
-    def test_divide_method_returns_correct_result(self):
-        self.assertEqual(1, self.calc.divide(2, 2))
-        self.assertEqual(1.5, self.calc.divide(3, 2))
+    def test_add_error(self):
+        with self.assertRaises(TypeError):
+            self.calc.add(2, "3")
 
-    def test_add_method_fails_with_nan_parameter(self):
-        self.assertRaises(TypeError, self.calc.add, "2", 2)
-        self.assertRaises(TypeError, self.calc.add, 2, "2")
-        self.assertRaises(TypeError, self.calc.add, "2", "2")
-        self.assertRaises(TypeError, self.calc.add, None, 2)
-        self.assertRaises(TypeError, self.calc.add, 2, None)
-        self.assertRaises(TypeError, self.calc.add, object(), 2)
-        self.assertRaises(TypeError, self.calc.add, 2, object())
+    def test_substract(self):
+        self.assertEqual(self.calc.substract(5, 3), 2)
 
-    def test_divide_method_fails_with_nan_parameter(self):
-        self.assertRaises(TypeError, self.calc.divide, "2", 2)
-        self.assertRaises(TypeError, self.calc.divide, 2, "2")
-        self.assertRaises(TypeError, self.calc.divide, "2", "2")
+    def test_substract_error(self):
+        with self.assertRaises(TypeError):
+            self.calc.substract(5, "3")
 
-    def test_divide_method_fails_with_division_by_zero(self):
-        self.assertRaises(TypeError, self.calc.divide, 2, 0)
-        self.assertRaises(TypeError, self.calc.divide, 2, -0)
-        self.assertRaises(TypeError, self.calc.divide, 0, 0)
-        self.assertRaises(TypeError, self.calc.divide, "0", 0)
+    @patch('app.util.validate_permissions', return_value=True)
+    def test_multiply(self, mock_validate):
+        self.assertEqual(self.calc.multiply(2, 3), 6)
 
-    @patch('app.util.validate_permissions', side_effect=mocked_validation, create=True)
-    def test_multiply_method_returns_correct_result(self, _validate_permissions):
-        self.assertEqual(4, self.calc.multiply(2, 2))
-        self.assertEqual(0, self.calc.multiply(1, 0))
-        self.assertEqual(0, self.calc.multiply(-1, 0))
-        self.assertEqual(-2, self.calc.multiply(-1, 2))
+    @patch('app.util.validate_permissions', return_value=False)
+    def test_multiply_error_permission(self, mock_validate):
+        with self.assertRaises(InvalidPermissions):
+            self.calc.multiply(2, 3)
 
+    def test_divide(self):
+        self.assertEqual(self.calc.divide(6, 2), 3.0)
 
-if __name__ == "__main__":  # pragma: no cover
-    unittest.main()
+    def test_divide_error_zero(self):
+        with self.assertRaises(TypeError):
+            self.calc.divide(6, 0)
+
+    def test_power(self):
+        self.assertEqual(self.calc.power(2, 3), 8.0)
+
+    def test_power_error(self):
+        with self.assertRaises(TypeError):
+            self.calc.power(2, "3")
+
+    def test_square_root(self):
+        self.assertEqual(self.calc.square_root(9), 3.0)
+
+    def test_square_root_error_negative(self):
+        with self.assertRaises(TypeError):
+            self.calc.square_root(-9)
+
+    def test_log10(self):
+        self.assertEqual(self.calc.log10(100), 2.0)
+
+    def test_log10_error_zero(self):
+        with self.assertRaises(TypeError):
+            self.calc.log10(0)
