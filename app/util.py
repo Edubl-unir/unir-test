@@ -23,4 +23,6 @@ def invalid_convert_to_number(operand):
 
 def validate_permissions(operation, user):
     print(f"checking permissions of {user} for operation {operation}")
+    if not operation:
+        return False
     return user == "user1"

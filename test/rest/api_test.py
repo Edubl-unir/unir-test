@@ -17,7 +17,7 @@ class TestApi(unittest.TestCase):
         self.assertTrue(len(BASE_URL) > 8, "URL no configurada")
 
     def test_api_hello(self):
-        url = f"{BASE_URL}/"
+        url = f"{BASE_URL.rstrip('/')}/"
         response = urlopen(url, timeout=DEFAULT_TIMEOUT)
         self.assertEqual(response.status, http.client.OK)
         self.assertEqual(response.read().decode("utf-8"), "Hello from The Calculator!\n")
