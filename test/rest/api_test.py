@@ -16,6 +16,12 @@ class TestApi(unittest.TestCase):
         self.assertIsNotNone(BASE_URL, "URL no configurada")
         self.assertTrue(len(BASE_URL) > 8, "URL no configurada")
 
+    def test_api_hello(self):
+        url = f"{BASE_URL}/"
+        response = urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(response.status, http.client.OK)
+        self.assertEqual(response.read().decode("utf-8"), "Hello from The Calculator!\n")
+
     def test_api_add(self):
         url = f"{BASE_URL}/calc/add/2/2"
         response = urlopen(url, timeout=DEFAULT_TIMEOUT)
@@ -74,6 +80,18 @@ class TestApi(unittest.TestCase):
 
     def test_api_power_error(self):
         url = f"{BASE_URL}/calc/power/2/a"
+        with self.assertRaises(HTTPError) as e:
+            urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(e.exception.code, http.client.BAD_REQUEST)
+
+    def test_api_power_error_value(self):
+        url = f"{BASE_URL}/calc/power/-1/0.5"
+        with self.assertRaises(HTTPError) as e:
+            urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(e.exception.code, http.client.BAD_REQUEST)
+
+    def test_api_power_error_overflow(self):
+        url = f"{BASE_URL}/calc/power/10/1000"
         with self.assertRaises(HTTPError) as e:
             urlopen(url, timeout=DEFAULT_TIMEOUT)
         self.assertEqual(e.exception.code, http.client.BAD_REQUEST)
