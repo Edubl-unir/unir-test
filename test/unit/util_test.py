@@ -39,3 +39,9 @@ class TestUtil(unittest.TestCase):
     def test_validate_permissions(self):
         self.assertTrue(util.validate_permissions("multiply", "user1"))
         self.assertFalse(util.validate_permissions("multiply", "user2"))
+
+    def test_validate_permissions_unauthorized(self):
+        self.assertFalse(util.validate_permissions("any_action", "unknown_user"))
+
+    def test_validate_permissions_invalid_action(self):
+        self.assertFalse(util.validate_permissions("", "user1"))
