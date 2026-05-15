@@ -24,3 +24,18 @@ class TestUtil(unittest.TestCase):
         self.assertRaises(TypeError, util.convert_to_number, "s")
         self.assertRaises(TypeError, util.convert_to_number, None)
         self.assertRaises(TypeError, util.convert_to_number, object())
+
+    def test_invalid_convert_to_number_correct_param(self):
+        self.assertEqual(4, util.invalid_convert_to_number("4"))
+        self.assertAlmostEqual(4.0, util.invalid_convert_to_number("4.0"), delta=0.0000001)
+
+    def test_invalid_convert_to_number_invalid_type(self):
+        self.assertRaises(TypeError, util.invalid_convert_to_number, "")
+        self.assertRaises(TypeError, util.invalid_convert_to_number, "3.h")
+        self.assertRaises(TypeError, util.invalid_convert_to_number, "s")
+        self.assertRaises(TypeError, util.invalid_convert_to_number, None)
+        self.assertRaises(TypeError, util.invalid_convert_to_number, object())
+
+    def test_validate_permissions(self):
+        self.assertTrue(util.validate_permissions("multiply", "user1"))
+        self.assertFalse(util.validate_permissions("multiply", "user2"))
