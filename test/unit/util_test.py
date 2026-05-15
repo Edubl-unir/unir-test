@@ -15,6 +15,8 @@ class TestUtil(unittest.TestCase):
         self.assertAlmostEqual(0.0, util.convert_to_number("0.0"), delta=0.0000001)
         self.assertAlmostEqual(0.0, util.convert_to_number("-0.0"), delta=0.0000001)
         self.assertAlmostEqual(-1.0, util.convert_to_number("-1.0"), delta=0.0000001)
+        self.assertEqual(4, util.convert_to_number(" 4 "))
+        self.assertAlmostEqual(4.0, util.convert_to_number(" 4.0  "), delta=0.0000001)
 
     def test_convert_to_number_invalid_type(self):
         self.assertRaises(TypeError, util.convert_to_number, "")
