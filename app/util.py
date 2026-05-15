@@ -10,10 +10,10 @@ def convert_to_number(operand):
         raise TypeError("Operator cannot be converted to number")
 
 
-def InvalidConvertToNumber(operand):
+def invalid_convert_to_number(operand):
     try:
         if "." in operand:
-            return (float(operand))
+            return float(operand)
 
         return int(operand)
 
