@@ -1,7 +1,7 @@
 .PHONY: all $(MAKECMDGOALS)
 
 test-all: test-unit pylint test-api test-e2e
-	@echo "🚀 ¡Todas las pruebas del pipeline han finalizado con éxito!"
+	@echo "Todas las pruebas del pipeline han finalizado con éxito"
 
 build:
 	docker build -t calculator-app .

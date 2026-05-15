@@ -24,7 +24,7 @@ context('Calc', () => {
     cy.screenshot()
   })
 
-  it.skip('can click multiply', () => {
+  it('can click multiply', () => {
     cy.get('#in-op1').clear().type('2')
     cy.get('#in-op2').clear().type('3')
     cy.get('#button-multiply').click()

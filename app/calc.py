@@ -1,5 +1,5 @@
-import app
 import math
+import app
 
 
 class InvalidPermissions(Exception):
@@ -45,7 +45,8 @@ class Calculator:
             raise TypeError("Logarithm of zero or negative number is not possible")
         return math.log10(x)
 
-    def check_types(self, *args):
+    @staticmethod
+    def check_types(*args):
         for arg in args:
             if not isinstance(arg, (int, float)):
                 raise TypeError("Parameters must be numbers")
